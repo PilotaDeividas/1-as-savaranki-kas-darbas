@@ -1,0 +1,31 @@
+name: Run Tests
+
+on:
+  push:
+    tags:
+      - 'v*'  # Tikrina, kai įkeltas naujas tag'as, pvz., v0.2
+  pull_request:
+    branches:
+      - main  # arba nurodykite branch'ą, kuriame norite atlikti testus
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # arba pasirinkite savo versiją
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # arba kita komanda, jei naudojate kitą priklausomybių valdymą
+
+    - name: Run tests
+      run: |
+        pytest  # arba kita komanda, kuri paleidžia jūsų testus
