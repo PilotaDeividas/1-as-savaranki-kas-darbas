@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <numeric>
 #include <iomanip>
+#include <stdexcept>
+#include <random>
 
 class Student {
 private:
@@ -18,14 +20,12 @@ private:
     double galutinisMediana;
 
 public:
-  
     Student() : vardas(""), pavarde(""), egzaminas(0), galutinisVidurkis(0), galutinisMediana(0) {}
   
     Student(const Student& other)
         : vardas(other.vardas), pavarde(other.pavarde), namuDarbai(other.namuDarbai),
           egzaminas(other.egzaminas), galutinisVidurkis(other.galutinisVidurkis), galutinisMediana(other.galutinisMediana) {}
 
-   
     Student& operator=(const Student& other) {
         if (this == &other) return *this;
         vardas = other.vardas;
@@ -36,7 +36,9 @@ public:
         galutinisMediana = other.galutinisMediana;
         return *this;
     }
+
     ~Student() {}
+
     void ivestiDuomenis() {
         std::cout << "Įveskite studento vardą: ";
         std::cin >> vardas;
@@ -53,6 +55,19 @@ public:
         std::cout << "Įveskite egzamino rezultatą: ";
         std::cin >> egzaminas;
     }
+
+    void generuotiAtsitiktiniusDuomenis() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dist(1, 10);
+
+        namuDarbai.clear();
+        for (int i = 0; i < 5; ++i) {
+            namuDarbai.push_back(dist(gen));
+        }
+        egzaminas = dist(gen);
+    }
+
     void skaiciuotiGalutiniVidurki() {
         double vidurkis = std::accumulate(namuDarbai.begin(), namuDarbai.end(), 0.0) / namuDarbai.size();
         galutinisVidurkis = 0.4 * vidurkis + 0.6 * egzaminas;
@@ -77,4 +92,4 @@ public:
     }
 };
 
-#endif //
+#endif
